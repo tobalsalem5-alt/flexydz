@@ -29,14 +29,37 @@ async function apiCall(channel, data) {
             }
         }
 
-        const res = await fetch(`${serverUrl}/api/ipc/${channel}`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'Authorization': token },
-            body: JSON.stringify({ data })
-        });
-        if (!res.ok) throw new Error('API request failed: ' + res.statusText);
-        return await res.json();
+        try {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 seconds timeout
+            
+            const res = await fetch(`${serverUrl}/api/ipc/${channel}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': token },
+                body: JSON.stringify({ data }),
+                signal: controller.signal
+            });
+            clearTimeout(timeoutId);
+            
+            if (!res.ok) {
+                console.error('API request failed:', res.statusText);
+                return { success: false, message: 'فشل الاتصال: ' + res.statusText };
+            }
+            return await res.json();
+        } catch (e) {
+            console.error('Network Error in apiCall:', e);
+            return { success: false, message: 'خطأ في الشبكة أو السيرفر لا يستجيب' };
+        }
     }
+}
+
+// Polling mechanism to keep data fresh in Web Mode (since no WebSockets)
+if (typeof require === 'undefined') {
+    setInterval(() => {
+        if (document.getElementById('sim-cards-tab').classList.contains('active')) {
+            if(typeof loadSims === 'function') loadSims();
+        }
+    }, 10000);
 }
 
 
