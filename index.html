@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tobal Telegram Flexy Dashboard</title>
+    <link rel="stylesheet" href="telegram_style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <i class="fas fa-satellite-dish"></i>
+                <h2>Tobal Desktop</h2>
+            </div>
+            <nav class="menu">
+                <a href="#" class="nav-link active" data-target="dashboard-tab" data-i18n="dashboard"><i class="fas fa-home"></i> الرئيسية</a>
+                <a href="#" class="nav-link" data-target="sims-tab" data-i18n="sims"><i class="fas fa-sim-card"></i> إدارة الشرائح</a>
+                <a href="#" class="nav-link" data-target="modem-ip-control-tab" data-i18n="modem_ip_control"><i class="fas fa-network-wired"></i> التحكم بالشرائح IP</a>
+                <a href="#" class="nav-link" data-target="meetmob-tab" data-i18n="meetmob"><i class="fas fa-bolt"></i> بوابة موبيليس Meetmob</a>
+                <a href="#" class="nav-link" data-target="idoom-tab" data-i18n="idoom"><i class="fas fa-globe"></i> بوابة إيدوم Idoom</a>
+                <a href="#" class="nav-link" data-target="sim-offers-tab" data-i18n="sim_offers"><i class="fas fa-tags"></i> عروض الشرائح</a>
+                <a href="#" class="nav-link" data-target="products-tab" data-i18n="products"><i class="fas fa-box-open"></i> إدارة المنتجات</a>
+                <a href="#" class="nav-link" data-target="agents-tab" data-i18n="agents"><i class="fas fa-users"></i> إدارة الزبائن والوكلاء</a>
+                <a href="#" class="nav-link" data-target="journal-agents-tab" data-i18n="journal_agents"><i class="fas fa-book-reader"></i> سجل الزبائن (Journal)</a>
+                <a href="#" class="nav-link" data-target="journal-server-tab" data-i18n="journal_server"><i class="fas fa-server"></i> سجل السيرفر (Server)</a>
+                <a href="#" class="nav-link" data-target="bot-manager-tab" data-i18n="bot_manager"><i class="fas fa-robot"></i> البوت (Autre Paramètre)</a>
+                <a href="#" class="nav-link" data-target="settings-tab" data-i18n="settings"><i class="fas fa-cog"></i> الإعدادات</a>
+            </nav>
+            <div class="server-status online">
+                <div class="status-indicator"></div>
+                <span data-i18n="server_connected">الخادم متصل</span>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="topbar">
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="البحث...">
+                </div>
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <!-- Language selector -->
+                    <select id="langSelector" onchange="changeLanguage(this.value)" style="background: var(--panel-bg); color: var(--text-main); border: 1px solid var(--border-color); padding: 6px 12px; border-radius: 8px; font-family: 'Cairo', sans-serif; cursor: pointer; font-size: 13px; outline: none; border-color: rgba(59, 130, 246, 0.3);">
+                        <option value="ar">العربية (AR)</option>
+                        <option value="fr">Français (FR)</option>
+                    </select>
+                    <div class="user-profile">
+                        <div class="avatar"><i class="fas fa-user-shield"></i></div>
+                        <span>المدير العام</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dashboard Tab -->
+            <div id="dashboard-tab" class="tab-content active">
+                <div class="stats-grid">
+                    <div class="stat-card"><div class="stat-icon ooredoo"><i class="fas fa-mobile-alt"></i></div><div class="stat-info"><h3 data-i18n="ooredoo_bal">رصيد أوريدو</h3><p class="amount" id="stat-ooredoo-balance">0 دج</p></div></div>
+                    <div class="stat-card"><div class="stat-icon djezzy"><i class="fas fa-mobile-alt"></i></div><div class="stat-info"><h3 data-i18n="djezzy_bal">رصيد جيزي</h3><p class="amount" id="stat-djezzy-balance">0 دج</p></div></div>
+                    <div class="stat-card"><div class="stat-icon mobilis"><i class="fas fa-mobile-alt"></i></div><div class="stat-info"><h3 data-i18n="mobilis_bal">رصيد موبيليس</h3><p class="amount" id="stat-mobilis-balance">0 دج</p></div></div>
+                    <div class="stat-card"><div class="stat-icon agents"><i class="fas fa-users"></i></div><div class="stat-info"><h3 data-i18n="active_agents">الوكلاء النشطين</h3><p class="amount" id="stat-active-agents">0 وكيل</p></div></div>
+                </div>
+
+                <div class="dashboard-grid">
+                    <!-- Transactions -->
+                    <div class="panel">
+                        <div class="panel-header">
+                            <h3><i class="fas fa-exchange-alt"></i> آخر عمليات الفليكسي</h3>
+                        </div>
+                        <div class="table-container">
+                            <table>
+                                <thead><tr><th>المعرف</th><th>الوكيل</th><th>رقم الهاتف</th><th>المبلغ</th><th>الحالة</th></tr></thead>
+                                <tbody>
+                                    <tr><td>#1024</td><td>أحمد</td><td class="phone-num">0551234567</td><td class="amount-val">500 دج</td><td><span class="badge success">ناجحة</span></td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Meetmob Mobilis Tab -->
+            <div id="meetmob-tab" class="tab-content" style="display:none;">
+                <!-- Pending Captchas Panel (Only visible when there is a pending captcha) -->
+                <div id="meetmob-pending-captchas-panel" class="panel" style="display: none; padding: 24px; margin-bottom: 24px; border: 1px solid rgba(245, 158, 11, 0.3); background: linear-gradient(135deg, rgba(245, 158, 11, 0.05) 0%, rgba(245, 158, 11, 0.01) 100%);">
+                    <div class="panel-header" style="border-bottom: 1px solid rgba(245, 158, 11, 0.2); padding-bottom: 12px; margin-bottom: 20px;">
+                        <h3 style="color: #f59e0b; font-weight: 700; margin: 0; display: flex; align-items: center; gap: 10px; font-family: 'Cairo', sans-serif;">
+                            <i class="fas fa-exclamation-triangle"></i> رمز كابتشا معلق من عمليات البوت التلقائية (Pending Bot Captcha)
+                        </h3>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 20px; align-items: center;">
+                        <div style="text-align: center; background: var(--bg-color); border: 1px solid var(--border-color); padding: 15px; border-radius: 12px;">
+                            <img id="meetmob_pending_captcha_img" src="" alt="Pending Captcha" style="max-height: 60px; max-width: 100%; border-radius: 6px; margin-bottom: 10px; display: block; margin-left: auto; margin-right: auto;">
+                            <span style="font-size: 14px; font-weight: 700; color: var(--text-main); font-family: 'Cairo', sans-serif;" id="meetmob_pending_captcha_phone">06XXXXXXXX</span>
+                        </div>
+                        <div>
+                            <p style="color: var(--text-muted); font-size: 13.5px; line-height: 1.6; margin-bottom: 15px; font-family: 'Cairo', sans-serif;">
+                                ⚠️ تم اكتشاف عملية شحن تلقائية معلقة بانتظار إدخال رمز الكابتشا. يمكنك كتابته هنا لإتمام عملية الشحن للزبون فوراً:
+                            </p>
+                            <input type="hidden" id="meetmob_pending_captcha_id" value="">
+                            <div style="display: flex; gap: 10px;">
+                                <input type="text" id="meetmob_pending_captcha_input" class="input-field" placeholder="رمز الكابتشا المعروض في الصورة" style="height: 44px; border-radius: 8px; font-size: 16px; font-weight: 700; text-align: center; flex: 1; font-family: 'Cairo', sans-serif;">
+                                <button class="btn success" style="height: 44px; border-radius: 8px; font-weight: 700; font-size: 14px; padding: 0 25px; font-family: 'Cairo', sans-serif;" onclick="submitPendingCaptcha()"><i class="fas fa-check-double"></i> إرسال وتأكيد</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 24px; margin-bottom: 24px;">
+                    
+                    <!-- Panel 1: Credentials & Login -->
+                    <div class="panel" style="padding: 24px;">
+                        <div class="panel-header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-bottom: 20px;">
+                            <h3 style="color: var(--success); font-weight: 700; margin: 0; display: flex; align-items: center; gap: 10px;">
+                                <i class="fas fa-key"></i> إعدادات حساب Meetmob
+                            </h3>
+                        </div>
+                        <div class="settings-form" style="display: flex; flex-direction: column; gap: 16px;">
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label style="font-weight: 600; font-size: 13.5px; display: block; margin-bottom: 6px;">رقم هاتف حساب موبيليس (Meetmob Phone)</label>
+                                <input type="text" id="meetmob_user_phone" class="input-field" placeholder="مثال: 0660123456" style="height: 40px; border-radius: 8px;">
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label style="font-weight: 600; font-size: 13.5px; display: block; margin-bottom: 6px;">رمز PIN الخاص بالحساب (Meetmob PIN)</label>
+                                <input type="password" id="meetmob_user_pin" class="input-field" placeholder="رمز الحساب المكون من 4 أرقام أو أكثر" style="height: 40px; border-radius: 8px;">
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label style="font-weight: 600; font-size: 13.5px; display: block; margin-bottom: 6px;">عنوان IP أو منفذ شريحة الـ OTP (Modem IP/Port)</label>
+                                <input type="text" id="meetmob_sms_modem" class="input-field" placeholder="مثال: 192.168.8.1 أو COM3" value="192.168.8.1" style="height: 40px; border-radius: 8px;">
+                            </div>
+                            
+                            <div style="display: flex; gap: 10px; margin-top: 8px;">
+                                <button class="btn secondary" style="flex: 1; height: 42px; border-radius: 8px; font-weight: 600;" onclick="saveMeetmobSettings()"><i class="fas fa-save"></i> حفظ البيانات</button>
+                                <button id="btnMeetmobLogin" class="btn success" style="flex: 1.2; height: 42px; border-radius: 8px; font-weight: 700;" onclick="startMeetmobLogin()"><i class="fas fa-sign-in-alt"></i> تسجيل الدخول (OTP)</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Panel 2: Live OTP Interceptor Console -->
+                    <div class="panel" style="padding: 24px; display: flex; flex-direction: column;">
+                        <div class="panel-header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
+                            <h3 style="color: var(--primary); font-weight: 700; margin: 0; display: flex; align-items: center; gap: 10px;">
+                                <i class="fas fa-shield-alt"></i> معالج التحقق التلقائي (Auto OTP Interceptor)
+                            </h3>
+                            <div id="meetmob_login_status" style="font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 6px;">
+                                <span class="status-indicator" style="background-color: var(--danger); box-shadow: 0 0 8px var(--danger); width: 8px; height: 8px; display: inline-block; border-radius: 50%;"></span>
+                                <span id="meetmob_status_text" style="color: var(--text-muted);">غير متصل</span>
+                            </div>
+                        </div>
+                        <div style="flex: 1; display: flex; flex-direction: column; gap: 16px;">
+                            <div style="background: rgba(37, 99, 235, 0.04); border: 1px dashed rgba(37, 99, 235, 0.2); padding: 15px; border-radius: 10px; font-size: 13px; line-height: 1.6; color: var(--text-muted);">
+                                💡 بمجرد الضشت على <b>تسجيل الدخول</b>، ستقوم المنصة بإرسال كود OTP إلى شريحتك. سيقوم النظام بمراقبة صندوق الرسائل للمودم وقراءة الكود وإدخاله وتأكيده فوراً دون أي تدخل منك!
+                            </div>
+                            
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label style="font-weight: 600; font-size: 13px; display: block; margin-bottom: 6px;">رمز التحقق OTP (يدوي/تلقائي)</label>
+                                <div style="display: flex; gap: 10px;">
+                                    <input type="text" id="meetmob_manual_otp" class="input-field" placeholder="رمز الـ OTP (من 4 إلى 6 أرقام)" style="height: 40px; border-radius: 8px; text-align: center; font-size: 16px; font-weight: 700; letter-spacing: 4px;">
+                                    <button id="btnMeetmobVerifyOtp" class="btn primary" style="height: 40px; border-radius: 8px; padding: 0 20px; font-weight: 700;" onclick="verifyMeetmobOtp()"><i class="fas fa-check-circle"></i> تأكيد الكود</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Panel 3 & 4: Cards Inventory & Manual Recharge Form -->
+                <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 24px;">
+                    
+                    <!-- Recharge Mobilis Form -->
+                    <div class="panel" style="padding: 24px;">
+                        <div class="panel-header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-bottom: 20px;">
+                            <h3 style="color: var(--success); font-weight: 700; margin: 0; display: flex; align-items: center; gap: 10px;">
+                                <i class="fas fa-bolt"></i> شحن بطاقة تعبئة موبيليس للزبون (Recharge Cart)
+                            </h3>
+                        </div>
+                        <div class="settings-form" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                            <div class="form-group" style="margin-bottom: 0; grid-column: span 2;">
+                                <label style="font-weight: 600; font-size: 13.5px; display: block; margin-bottom: 6px;">رقم هاتف الزبون (بدون 0 في البداية)</label>
+                                <input type="text" id="meetmob_recharge_phone" class="input-field" placeholder="مثال: 660438659" style="height: 42px; border-radius: 8px; font-size: 15px; font-weight: 700; letter-spacing: 1px;">
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0; grid-column: span 2;">
+                                <label style="font-weight: 600; font-size: 13.5px; display: block; margin-bottom: 6px;">كود بطاقة التعبئة (Voucher PIN Code)</label>
+                                <input type="text" id="meetmob_recharge_pin" class="input-field" placeholder="كود البطاقة المكون من 14 رقم" style="height: 42px; border-radius: 8px; font-size: 15px; font-weight: 700; letter-spacing: 1px;">
+                            </div>
+                            
+                            <!-- Captcha verification -->
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label style="font-weight: 600; font-size: 13px; display: block; margin-bottom: 6px;">رمز التحقق (Captcha)</label>
+                                <div style="display: flex; gap: 10px; align-items: center; background: var(--bg-color); border: 1px solid var(--border-color); padding: 5px; border-radius: 8px; height: 42px; box-sizing: border-box;">
+                                    <img id="meetmob_captcha_img" src="" alt="Captcha" style="height: 30px; max-width: 100px; border-radius: 4px; display: none;">
+                                    <div id="meetmob_captcha_loading" style="font-size: 12px; color: var(--text-muted); padding: 5px;"><i class="fas fa-spinner fa-spin"></i> بانتظار الاتصال...</div>
+                                    <button class="btn secondary" style="padding: 4px 8px; border-radius: 6px; font-size: 11px; height: 30px;" onclick="refreshMeetmobCaptcha()"><i class="fas fa-sync-alt"></i></button>
+                                </div>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label style="font-weight: 600; font-size: 13px; display: block; margin-bottom: 6px;">أدخل رمز الكابتشا</label>
+                                <input type="text" id="meetmob_recharge_captcha" class="input-field" placeholder="رمز الصورة" style="height: 42px; border-radius: 8px; text-align: center; font-weight: 700; font-size: 15px;">
+                            </div>
+                            
+                            <button id="btnMeetmobExecute" class="btn success" style="grid-column: span 2; height: 46px; border-radius: 8px; font-weight: 700; font-size: 15px; margin-top: 10px;" onclick="executeMeetmobRecharge()"><i class="fas fa-paper-plane"></i> تنفيذ شحن البطاقة الآن</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Panel 4: Live Automation Logs -->
+                    <div class="panel" style="padding: 24px; display: flex; flex-direction: column;">
+                        <div class="panel-header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-bottom: 20px;">
+                            <h3 style="color: var(--text-main); font-weight: 700; margin: 0; display: flex; align-items: center; gap: 10px;">
+                                <i class="fas fa-terminal"></i> سجل العمليات المباشر (Automation Logs)
+                            </h3>
+                        </div>
+                        <div id="meetmobLogs" style="flex: 1; min-height: 250px; background: #0f172a; color: #10b981; font-family: 'Courier New', monospace; padding: 15px; border-radius: 10px; overflow-y: auto; text-align: left; direction: ltr; font-size: 12.5px; line-height: 1.5; border: 1px solid #1e293b; box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);">
+                            <div style="color: #64748b;">> Meetmob Mobilis automation system initialized.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bot Manager Tab -->
+            <div id="bot-manager-tab" class="tab-content" style="display:none;">
+                <div class="panel" style="margin-bottom: 20px;">
+                    <div class="panel-header">
+                        <h3><i class="fas fa-cogs"></i> التحكم في البوت (Autre Paramètre)</h3>
+                    </div>
+                    <div class="settings-form" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div>
+                            <div class="form-group">
+                                <label style="display: flex; align-items: center; gap: 10px;">
+                                    Token du Bot Telegram
+                                    <div id="bot_status_indicator" class="status-indicator" style="background-color: var(--danger); box-shadow: 0 0 10px var(--danger); width: 10px; height: 10px; border-radius: 50%;"></div>
+                                    <span id="bot_status_text" style="font-size: 12px; color: var(--text-muted);">Déconnecté</span>
+                                </label>
+                                <input type="text" id="setting_bot_token" class="input-field" placeholder="Entrez le Token de BotFather">
+                            </div>
+                            <div class="form-group">
+                                <label>Secret Admin (كلمة سر المدير)</label>
+                                <input type="text" id="setting_admin_secret" class="input-field" placeholder="Mot de passe">
+                            </div>
+                            <div class="form-group">
+                                <label>Captcha API Key (2Captcha)</label>
+                                <input type="text" id="setting_captcha_api_key" class="input-field" placeholder="Entrez la clé API 2Captcha">
+                            </div>
+                        </div>
+                        <div style="display: flex; flex-direction: column; justify-content: flex-end; gap: 10px;">
+                            <button class="btn primary" style="width:100%; height: 50px; font-size: 18px;" onclick="saveAndStartBot()"><i class="fas fa-play"></i> تشغيل / تحديث الإعدادات</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bot-monitor-grid" style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-bottom: 20px;">
+                    <!-- Live Logs -->
+                    <div class="panel">
+                        <div class="panel-header">
+                            <h3><i class="fab fa-telegram-plane"></i> مراقبة حركات البوت مباشرة (Live)</h3>
+                            <div class="status-badge live">LIVE</div>
+                        </div>
+                        <div class="log-viewer" id="liveBotLogs" style="height: 400px; overflow-y: auto; background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 8px; padding: 10px; font-family: 'Cairo', sans-serif;">
+                            <!-- Log entries will appear here -->
+                        </div>
+                    </div>
+
+                    <!-- Broadcast Panel -->
+                    <div class="panel">
+                        <div class="panel-header">
+                            <h3><i class="fas fa-bullhorn"></i> إرسال جماعي (Broadcast)</h3>
+                        </div>
+                        <div class="broadcast-form" style="display: flex; flex-direction: column; gap: 15px;">
+                            <p style="font-size: 13px; color: var(--text-muted);">سيتم إرسال هذه الرسالة لجميع الوكلاء المسجلين في البوت.</p>
+                            <textarea id="broadcast_message" class="input-field" style="height: 150px; resize: none;" placeholder="اكتب رسالتك هنا..."></textarea>
+                            <button class="btn primary" onclick="sendBroadcast()"><i class="fas fa-paper-plane"></i> إرسال للكل</button>
+                        </div>
+                    </div>
+                </div>
+
+                 <div class="panel">
+                    <div class="panel-header">
+                        <h3><i class="fas fa-history"></i> سجل العمليات السابقة</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SIMs Tab -->
+            <div id="sims-tab" class="tab-content" style="display:none;">
+                <div class="panel">
+                    <div class="panel-header">
+                        <h3><i class="fas fa-sim-card"></i> إدارة الشرائح (SIMs)</h3>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn secondary" onclick="const icon=this.querySelector('i'); icon.classList.add('fa-spin'); loadSims().then(() => setTimeout(()=>icon.classList.remove('fa-spin'), 500))"><i class="fas fa-sync-alt"></i> تحديث</button>
+                            <button class="btn primary" onclick="resetSimModal(); showModal('addSimModal')"><i class="fas fa-plus"></i> إضافة شريحة</button>
+                        </div>
+                    </div>
+                    <div style="background: rgba(0,0,0,0.2); padding: 10px 15px; border-radius: 8px; margin-bottom: 15px; display: flex; gap: 20px; align-items: center; border: 1px solid var(--border-color); flex-wrap: wrap;">
+                        <span style="font-size: 12px; color: var(--text-muted);"><i class="fas fa-sort-amount-down"></i> ترتيب السحب (البدء بالشريحة الأقل رصيداً):</span>
+                        <label style="display: flex; align-items: center; gap: 5px; font-size: 12px; cursor: pointer; color: white;">
+                            <input type="checkbox" id="sort_asc_mobilis" onchange="updateSimSortOrder('Mobilis', this.checked)">
+                            <img src="images/mobilis.png" width="16" height="16" onerror="this.src='';this.className='fas fa-sim-card'" style="border-radius:3px;"> موبيليس
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 5px; font-size: 12px; cursor: pointer; color: white;">
+                            <input type="checkbox" id="sort_asc_djezzy" onchange="updateSimSortOrder('Djezzy', this.checked)">
+                            <img src="images/djezzy.png" width="16" height="16" onerror="this.src='';this.className='fas fa-sim-card'" style="border-radius:3px;"> جازي
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 5px; font-size: 12px; cursor: pointer; color: white;">
+                            <input type="checkbox" id="sort_asc_ooredoo" onchange="updateSimSortOrder('Ooredoo', this.checked)">
+                            <img src="images/ooredoo.png" width="16" height="16" onerror="this.src='';this.className='fas fa-sim-card'" style="border-radius:3px;"> أوريدو
+                        </label>
+                    </div>
+                    <div id="simsGrid" class="sims-grid">
+                        <!-- Populated via JS as Cards -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Idoom Portal Tab -->
+            <div id="idoom-tab" class="tab-content" style="display:none;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+                    
+                    <!-- Idoom Manual Automation Control Panel -->
+                    <div class="panel" style="padding: 24px; grid-column: span 2; margin-bottom: 8px;">
+                        <div class="panel-header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
+                            <h3 style="color: var(--primary); font-weight: 700; margin: 0; display: flex; align-items: center; gap: 10px;">
+                                <i class="fas fa-plug" style="color: #10b981;"></i> تشغيل التعبئة والفحص التلقائي اليدوي (Manual Automation Control)
+                            </h3>
+                            <span style="font-size: 11px; background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 4px 8px; border-radius: 12px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px;">Puppeteer Engine Connected</span>
+                        </div>
+                        <div class="settings-form" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label style="font-weight: 600; font-size: 13.5px; display: block; margin-bottom: 8px; color: var(--text-muted);"><i class="fas fa-user-tag" style="margin-left: 5px;"></i> رقم هاتف / حساب إيدوم (Account Number)</label>
+                                <input type="text" id="idoom_manual_account" class="input-field" placeholder="مثال: 021XXXXXX أو 023XXXXXX" style="height: 42px; border-radius: 8px; font-weight: 500; letter-spacing: 0.5px;">
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label style="font-weight: 600; font-size: 13.5px; display: block; margin-bottom: 8px; color: var(--text-muted);"><i class="fas fa-key" style="margin-left: 5px;"></i> كود بطاقة التعبئة PIN (مطلوب للتعبئة التلقائية)</label>
+                                <input type="text" id="idoom_manual_pin" class="input-field" placeholder="رمز الكارت PIN المكون من 15 أو 16 رقم" style="height: 42px; border-radius: 8px; font-weight: 500; letter-spacing: 0.5px;">
+                            </div>
+                            <div style="grid-column: span 2; display: flex; gap: 15px; margin-top: 10px;">
+                                <button id="btnIdoomManualRecharge" class="btn success" style="flex: 1; height: 46px; border-radius: 8px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s;" onclick="executeIdoomManualRecharge()"><i class="fas fa-bolt"></i> تفعيل تعبئة تلقائي</button>
+                                <button id="btnIdoomManualCheck" class="btn primary" style="flex: 1; height: 46px; border-radius: 8px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s;" onclick="executeIdoomManualCheck()"><i class="fas fa-search-dollar"></i> فحص الفاتورة</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Idoom Cards Inventory Panel -->
+                    <div class="panel" style="display: flex; flex-direction: column;">
+                        <div class="panel-header">
+                            <h3><i class="fas fa-credit-card"></i> مخزون بطاقات التعبئة ADSL / 4G</h3>
+                            <div style="display: flex; gap: 10px;">
+                                <button class="btn primary" onclick="showModal('addCardModal')"><i class="fas fa-plus"></i> إضافة بطاقة</button>
+                                <button class="btn secondary" onclick="showModal('uploadCardsModal')"><i class="fas fa-file-upload"></i> رفع ملف</button>
+                            </div>
+                        </div>
+                        <div class="table-container" style="flex: 1; max-height: 520px; overflow-y: auto;">
+                            <table id="cardsTable">
+                                <thead>
+                                    <tr>
+                                        <th>الفئة</th>
+                                        <th>كود التعبئة (PIN)</th>
+                                        <th>القيمة</th>
+                                        <th>الحالة</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="cardsList">
+                                    <!-- Populated via JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Idoom Automation Terminal Panel -->
+                    <div class="panel" style="display: flex; flex-direction: column;">
+                        <div class="panel-header">
+                            <h3><i class="fas fa-robot"></i> تعبئة إيدوم التلقائية (Automation Terminal)</h3>
+                            <div class="status-badge live">MONITOR</div>
+                        </div>
+                        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px; line-height: 1.5;">
+                            ⚙️ مراقب العمليات المباشرة: يعرض حركات الفحص التلقائي وتعبئة الاشتراكات المنفذة بواسطة محرك Puppeteer بالخلفية.
+                        </p>
+                        <div class="terminal-container" id="automationTerminal" style="flex: 1; min-height: 380px; max-height: 520px; overflow-y: auto;">
+                            <div style="color: #64748b;">> System Ready. Waiting for Idoom recharge request...</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- SIM Offers Tab -->
+            <div id="sim-offers-tab" class="tab-content" style="display:none;">
+                <div class="panel">
+                    <div class="panel-header">
+                        <h3><i class="fas fa-tags"></i> إدارة عروض واشتراكات الشرائح</h3>
+                        <button class="btn primary" onclick="openSimOfferModal()"><i class="fas fa-plus"></i> إضافة عرض جديد</button>
+                    </div>
+                    <p style="color: var(--text-muted); margin-bottom: 20px; font-size: 13.5px; line-height: 1.6;">
+                        🏷️ يمكنك إضافة وتعديل وحذف عروض الشحن القياسية والاشتراكات لمختلف المتعاملين. تتيح هذه اللوحة للوكلاء شحن باقة العرض مباشرة للزبون بمجرد تفعيل كود USSD الخاص بها عبر السيرفر.
+                    </p>
+                    
+                    <div class="offers-operators-nav">
+                        <button class="active" data-op="All" onclick="filterSimOffers('All')">الكل</button>
+                        <button data-op="Mobilis" onclick="filterSimOffers('Mobilis')"><i class="fas fa-mobile-alt" style="color: var(--mobilis); margin-left: 5px;"></i> موبيليس</button>
+                        <button data-op="Djezzy" onclick="filterSimOffers('Djezzy')"><i class="fas fa-mobile-alt" style="color: var(--djezzy); margin-left: 5px;"></i> جيزي</button>
+                        <button data-op="Ooredoo" onclick="filterSimOffers('Ooredoo')"><i class="fas fa-mobile-alt" style="color: var(--ooredoo); margin-left: 5px;"></i> أوريدو</button>
+                    </div>
+                    
+                    <div class="table-container" style="margin-top: 15px;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>المعرف ID</th>
+                                    <th>المتعامل</th>
+                                    <th>اسم العرض</th>
+                                    <th>رمز التفعيل USSD</th>
+                                    <th>السعر</th>
+                                    <th>تفاصيل العرض / الوصف</th>
+                                    <th>الإجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="offersTableBody">
+                                <!-- Populated dynamically via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Products Tab -->
+            <div id="products-tab" class="tab-content" style="display:none;">
+                <div class="panel">
+                    <div class="panel-header">
+                        <h3><i class="fas fa-box-open"></i> إدارة المنتجات والنسب</h3>
+                        <button class="btn primary" onclick="openProductModal()"><i class="fas fa-plus"></i> إضافة منتج</button>
+                    </div>
+                    <div id="productsGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 15px; padding: 15px;">
+                        <!-- Populated via JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Agents Tab -->
+            <div id="agents-tab" class="tab-content" style="display:none;">
+                <div class="panel">
+                    <div class="panel-header">
+                        <h3><i class="fas fa-users"></i> إدارة الزبائن والوكلاء</h3>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn primary" onclick="openAgentModal('add')"><i class="fas fa-user-plus"></i> إضافة زبون جديد</button>
+                            <button class="btn primary" onclick="loadAgents()"><i class="fas fa-sync"></i> تحديث</button>
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>المعرف</th>
+                                    <th>الاسم</th>
+                                    <th>معرف تيليجرام ID</th>
+                                    <th>رقم الهاتف</th>
+                                    <th>الفئة</th>
+                                    <th>الرصيد</th>
+                                    <th>التحكم بالرصيد</th>
+                                    <th>المراسلة</th>
+                                    <th>الإجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="agentsList">
+                                <!-- Populated via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Journal Agents Tab -->
+            <div id="journal-agents-tab" class="tab-content" style="display:none;">
+                <div class="panel">
+                    <div class="panel-header">
+                        <h3><i class="fas fa-book-reader"></i> سجل عمليات الزبائن والديون</h3>
+                        <div class="filters" style="display: flex; gap: 10px;">
+                            <input type="text" id="agentSearchJournal" class="input-field" placeholder="ابحث عن زبون..." style="width: 200px;" onkeyup="filterAgentsJournal()">
+                            <select id="agentPeriodFilter" class="input-field" onchange="loadAgentJournal()">
+                                <option value="today">اليوم</option>
+                                <option value="month">هذا الشهر</option>
+                                <option value="all">الكل</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="journal-layout" style="display: grid; grid-template-columns: 300px 1fr; gap: 20px;">
+                        <div class="agent-list-panel" style="background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 10px; height: 600px; overflow-y: auto;">
+                            <div id="agentListJournal" class="agent-items">
+                                <!-- Agents will be listed here -->
+                            </div>
+                        </div>
+                        <div class="agent-details-panel">
+                            <div class="summary-cards" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+                                <div class="stat-card">
+                                    <div class="stat-info">
+                                        <h3>إجمالي الديون / المبيعات</h3>
+                                        <p class="amount" id="selectedAgentTotal" style="color: var(--primary);">0 دج</p>
+                                    </div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-info">
+                                        <h3>عدد العمليات</h3>
+                                        <p class="amount" id="selectedAgentCount" style="color: var(--success);">0</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="table-container">
+                                <table>
+                                    <thead><tr><th>الوقت</th><th>النوع</th><th>رقم المستفيد</th><th>المبلغ</th><th>الحالة</th></tr></thead>
+                                    <tbody id="agentTransactionsJournal">
+                                        <tr><td colspan="5" style="text-align:center;">اختر زبوناً لعرض العمليات</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Journal Server Tab -->
+            <div id="journal-server-tab" class="tab-content" style="display:none;">
+                <div class="panel">
+                    <div class="panel-header">
+                        <h3><i class="fas fa-server"></i> سجل السيرفر والشرائح (Server Logs)</h3>
+                        <div class="filters" style="display: flex; gap: 10px;">
+                            <select id="simFilterJournal" class="input-field" onchange="loadServerJournal()">
+                                <option value="all">كل الشرائح</option>
+                            </select>
+                            <select id="serverPeriodFilter" class="input-field" onchange="loadServerJournal()">
+                                <option value="today">اليوم</option>
+                                <option value="month">هذا الشهر</option>
+                                <option value="all">الكل</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="stats-summary" style="display: flex; gap: 20px; margin-bottom: 20px;">
+                        <div class="mini-stat" style="background: var(--panel-bg); border: 1px solid var(--border-color); padding:15px; border-radius:8px; flex:1;">
+                            <span style="color: var(--text-muted); font-size:12px;">إجمالي المبيعات (الفترة)</span>
+                            <div style="font-size:20px; font-weight:bold; color:var(--primary);" id="serverTotalSales">0 دج</div>
+                        </div>
+                        <div class="mini-stat" style="background: var(--panel-bg); border: 1px solid var(--border-color); padding:15px; border-radius:8px; flex:1;">
+                            <span style="color: var(--text-muted); font-size:12px;">العمليات الناجحة</span>
+                            <div style="font-size:20px; font-weight:bold; color:var(--success);" id="serverSuccessCount">0</div>
+                        </div>
+                        <div class="mini-stat" style="background: var(--panel-bg); border: 1px solid var(--border-color); padding:15px; border-radius:8px; flex:1;">
+                            <span style="color: var(--text-muted); font-size:12px;">العمليات الفاشلة</span>
+                            <div style="font-size:20px; font-weight:bold; color:var(--danger);" id="serverFailedCount">0</div>
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead><tr><th>الوقت</th><th>الشريحة</th><th>النوع</th><th>المستفيد</th><th>المبلغ</th><th>رصيد قبل</th><th>رصيد بعد</th><th>الحالة</th></tr></thead>
+                            <tbody id="serverTransactionsJournal">
+                                <!-- Populated via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Tab -->
+            <div id="settings-tab" class="tab-content" style="display:none;">
+                <div class="panel">
+                    <h3><i class="fas fa-cogs"></i> Paramètres du Bot et USSD</h3>
+                    <p style="color:var(--text-muted); margin-bottom: 20px;">Configurez les paramètres du bot et les codes de transfert ici.</p>
+                    
+                    <div class="settings-form">
+                        <h4>إعدادات إضافية</h4>
+                        <div class="form-group">
+                            <label>ID Client (Telegram ID للإشعارات)</label>
+                            <input type="text" id="setting_client_id" class="input-field" placeholder="Entrez l'ID du client pour les notifications">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-link" style="color: var(--primary); margin-left: 6px;"></i> كود ربط النظامين (meetmob_idoom_sync_code)</label>
+                            <input type="text" id="setting_meetmob_idoom_sync_code" class="input-field" placeholder="كود الربط والمزامنة">
+                            <span style="font-size: 11.5px; color: var(--text-muted); display: block; margin-top: 5px;">⚠️ كود الربط والمزامنة بين بوابتي Meetmob و Idoom لتأمين العمليات المشتركة.</span>
+                        </div>
+
+                        <h4>إعدادات تطبيق أوريدو أهلاً (Ooredoo Ahla App)</h4>
+                        
+                        <!-- Ahla Connection Status Indicator -->
+                        <div id="ahla-status-panel" style="background: rgba(16, 185, 129, 0.1); border-radius: 10px; padding: 12px 16px; margin-bottom: 15px; display: flex; align-items: center; gap: 12px; border: 1px solid rgba(16, 185, 129, 0.3);">
+                            <div id="ahla-status-dot" style="width: 14px; height: 14px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 8px #22c55e; flex-shrink: 0;"></div>
+                            <div style="flex: 1;">
+                                <div id="ahla-status-text" style="font-size: 14px; font-weight: bold; color: #10b981;">تطبيق أهلاً جاهز ومفتوح لتلقي الأوامر عبر الـ API ⚡</div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label><i class="fas fa-microchip" style="margin-left: 5px;"></i> مسار برنامج ADB (لم يعد مطلوباً)</label>
+                            <input type="text" id="setting_ooredoo_ahla_adb_path" class="input-field" placeholder="لم يعد هذا الخيار مهماً حيث تم التحويل للـ API" disabled style="background: #1e293b; color: #64748b;">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-phone-alt" style="margin-left: 5px;"></i> رقم شريحة الموزع Ooredoo (Ahla Phone)</label>
+                            <input type="text" id="setting_ooredoo_ahla_phone" class="input-field" placeholder="مثال: 0550123456">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-key" style="margin-left: 5px;"></i> كود PIN الخاص بتطبيق أهلاً (Ahla PIN)</label>
+                            <input type="text" id="setting_ooredoo_ahla_pin" class="input-field" placeholder="كود PIN المكون من 4 أرقام (مثال: 7840)">
+                        </div>
+
+                        <h4>Codes de Consultation de Solde</h4>
+                        <div class="form-group">
+                            <label>Code Solde Mobilis</label>
+                            <input type="text" id="setting_ussd_mobilis_balance" class="input-field">
+                        </div>
+                        <div class="form-group">
+                            <label>Code Solde Djezzy</label>
+                            <input type="text" id="setting_ussd_djezzy_balance" class="input-field">
+                        </div>
+                        <div class="form-group">
+                            <label>Code Solde Ooredoo</label>
+                            <input type="text" id="setting_ussd_ooredoo_balance" class="input-field">
+                        </div>
+
+                        <h4>Codes de Transfert Flexy</h4>
+                        <div class="form-group">
+                            <label>Code Transfert Mobilis</label>
+                            <input type="text" id="setting_ussd_mobilis_transfer" class="input-field">
+                        </div>
+                        <div class="form-group">
+                            <label>Code Transfert Djezzy</label>
+                            <input type="text" id="setting_ussd_djezzy_transfer" class="input-field">
+                        </div>
+                        <div class="form-group">
+                            <label>Code Transfert Ooredoo</label>
+                            <input type="text" id="setting_ussd_ooredoo_transfer" class="input-field">
+                        </div>
+
+                        <button class="btn primary" style="width:100%" onclick="saveSettings()">Enregistrer les paramètres</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Modem IP Control Tab -->
+            <div id="modem-ip-control-tab" class="tab-content" style="display:none;">
+                
+                <!-- Main Gateway Screen -->
+                <div id="ip-gateway-home" class="panel" style="text-align: center; padding: 50px 30px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); background: linear-gradient(135deg, var(--panel-bg) 0%, rgba(248, 250, 252, 0.5) 100%);">
+                    <h3 style="font-size: 26px; font-weight: 800; margin-bottom: 12px; color: var(--primary); display: flex; align-items: center; justify-content: center; gap: 12px;">
+                        <i class="fas fa-network-wired"></i> بوابة التحكم بالشرائح والمودم عبر IP
+                    </h3>
+                    <p style="color: var(--text-muted); margin-bottom: 45px; font-size: 15px; max-width: 600px; margin-left: auto; margin-right: auto; line-height: 1.6;">
+                        بوابة تحكم ذكية تتيح لك إرسال أكواد الـ USSD التفاعلية للشرائح وإرسال واستقبال رسائل الـ SMS مباشرة عبر الشبكة باستخدام الـ IP الخاص بمودم HiLink بدون أي تعقيد.
+                    </p>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; max-width: 960px; margin: 0 auto;">
+                        
+                        <!-- USSD Gateway Card -->
+                        <div class="stat-card" style="flex-direction: column; cursor: pointer; padding: 35px 24px; border-radius: 16px; border: 1px solid rgba(37, 99, 235, 0.1); background: var(--panel-bg); box-shadow: 0 4px 20px rgba(0,0,0,0.02); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); text-align: center;" 
+                             onclick="switchIpControlSubView('ussd')" 
+                             onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 12px 30px rgba(37, 99, 235, 0.1)'; this.style.borderColor='var(--primary)';" 
+                             onmouseout="this.style.transform='none'; this.style.boxShadow='0 4px 20px rgba(0,0,0,0.02)'; this.style.borderColor='rgba(37, 99, 235, 0.1)';">
+                            <div class="stat-icon" style="background: rgba(37, 99, 235, 0.08); color: var(--primary); width: 75px; height: 75px; font-size: 32px; border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+                                <i class="fas fa-terminal"></i>
+                            </div>
+                            <h3 style="font-size: 18px; font-weight: 800; margin-bottom: 10px; color: var(--text-main);">أوامر USSD عبر IP</h3>
+                            <p style="color: var(--text-muted); font-size: 13px; line-height: 1.5;">تشغيل أكواد USSD، الاستعلام عن الرصيد، وتأكيد التحويلات التفاعلية بنقرة واحدة.</p>
+                        </div>
+                        
+                        <!-- SMS Gateway Card -->
+                        <div class="stat-card" style="flex-direction: column; cursor: pointer; padding: 35px 24px; border-radius: 16px; border: 1px solid rgba(22, 163, 74, 0.1); background: var(--panel-bg); box-shadow: 0 4px 20px rgba(0,0,0,0.02); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); text-align: center;" 
+                             onclick="switchIpControlSubView('sms')" 
+                             onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 12px 30px rgba(22, 163, 74, 0.1)'; this.style.borderColor='var(--success)';" 
+                             onmouseout="this.style.transform='none'; this.style.boxShadow='0 4px 20px rgba(0,0,0,0.02)'; this.style.borderColor='rgba(22, 163, 74, 0.1)';">
+                            <div class="stat-icon" style="background: rgba(22, 163, 74, 0.08); color: var(--success); width: 75px; height: 75px; font-size: 32px; border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <h3 style="font-size: 18px; font-weight: 800; margin-bottom: 10px; color: var(--text-main);">إدارة الرسائل SMS عبر IP</h3>
+                            <p style="color: var(--text-muted); font-size: 13px; line-height: 1.5;">إرسال رسائل التنبيه للزبائن، وتصفح صندوق الوارد مباشرة لتأكيد عمليات الشحن.</p>
+                        </div>
+
+                        <!-- Voice Call Gateway Card -->
+                        <div class="stat-card" style="flex-direction: column; cursor: pointer; padding: 35px 24px; border-radius: 16px; border: 1px solid rgba(139, 92, 246, 0.1); background: var(--panel-bg); box-shadow: 0 4px 20px rgba(0,0,0,0.02); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); text-align: center;" 
+                             onclick="switchIpControlSubView('call')" 
+                             onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 12px 30px rgba(139, 92, 246, 0.1)'; this.style.borderColor='#8b5cf6';" 
+                             onmouseout="this.style.transform='none'; this.style.boxShadow='0 4px 20px rgba(0,0,0,0.02)'; this.style.borderColor='rgba(139, 92, 246, 0.1)';">
+                            <div class="stat-icon" style="background: rgba(139, 92, 246, 0.08); color: #8b5cf6; width: 75px; height: 75px; font-size: 32px; border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+                                <i class="fas fa-phone-volume"></i>
+                            </div>
+                            <h3 style="font-size: 18px; font-weight: 800; margin-bottom: 10px; color: var(--text-main);">إجراء مكالمات صوتية</h3>
+                            <p style="color: var(--text-muted); font-size: 13px; line-height: 1.5;">الاتصال الصوتي المباشر بالزبائن ومصلحة الزبائن، والتحكم في المكالمات الصادرة والواردة.</p>
+                        </div>
+                        
+                    </div>
+                </div>
+
+                <!-- USSD Sub-View -->
+                <div id="ip-ussd-panel" class="panel" style="display: none; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); padding: 30px;">
+                    <div class="panel-header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 15px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center;">
+                        <h3 style="font-size: 20px; font-weight: 800; color: var(--primary); display: flex; align-items: center; gap: 10px; margin: 0;">
+                            <i class="fas fa-terminal"></i> مركز تنفيذ أكواد USSD عبر IP
+                        </h3>
+                        <button class="btn secondary" style="padding: 8px 16px; border-radius: 8px; font-size: 13px;" onclick="switchIpControlSubView('home')"><i class="fas fa-arrow-right"></i> العودة للبوابة</button>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px;">
+                        <!-- Input Section -->
+                        <div style="display: flex; flex-direction: column; gap: 20px;">
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label style="font-weight: 700; margin-bottom: 8px; display: block; font-size: 14px;">عنوان IP الخاص بالمودم (Modem IP)</label>
+                                <input type="text" id="ip_ussd_modem_ip" class="input-field" placeholder="مثال: 192.168.8.1" value="192.168.8.1" style="height: 44px; border-radius: 8px;">
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label style="font-weight: 700; margin-bottom: 8px; display: block; font-size: 14px;">كود الـ USSD أو الرد التفاعلي</label>
+                                <input type="text" id="ip_ussd_code" class="input-field" placeholder="مثال: *100# أو الرد 1 أو 2" style="height: 44px; border-radius: 8px; font-family: monospace; font-size: 15px;">
+                            </div>
+                            
+                            <button id="btnExecuteIpUssd" class="btn primary" style="width: 100%; height: 46px; font-size: 15px; font-weight: 700; border-radius: 8px;" onclick="executeIpUssd()"><i class="fas fa-play-circle"></i> تشغيل الأمر USSD</button>
+                            
+                            <div style="border-top: 1px solid var(--border-color); padding-top: 20px; margin-top: 10px;">
+                                <h4 style="margin-bottom: 12px; font-size: 14px; font-weight: 700; color: var(--text-main);">أزرار وصول سريع للأكواد (الاستعلام):</h4>
+                                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                    <button class="btn secondary" style="padding: 6px 12px; font-size: 12.5px; border-radius: 6px; border-color: rgba(37,99,235,0.2); color: var(--primary);" onclick="setQuickUssdIpCode('*100#')">موبيليس رصيد (*100#)</button>
+                                    <button class="btn secondary" style="padding: 6px 12px; font-size: 12.5px; border-radius: 6px; border-color: rgba(30,41,59,0.2); color: var(--text-main);" onclick="setQuickUssdIpCode('*710#')">جيزي رصيد (*710#)</button>
+                                    <button class="btn secondary" style="padding: 6px 12px; font-size: 12.5px; border-radius: 6px; border-color: rgba(237,28,36,0.2); color: var(--ooredoo);" onclick="setQuickUssdIpCode('*133#')">أوريدو رصيد (*133#)</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Terminal Log Section -->
+                        <div style="display: flex; flex-direction: column;">
+                            <label style="font-weight: 700; margin-bottom: 8px; display: block; font-size: 14px;">شاشة الاستجابة والعمليات الحية (Terminal Log)</label>
+                            <div id="ipUssdLogs" style="flex: 1; min-height: 290px; background: #0f172a; color: #38bdf8; font-family: 'Courier New', monospace; padding: 18px; border-radius: 12px; overflow-y: auto; text-align: left; direction: ltr; font-size: 13.5px; line-height: 1.6; border: 1px solid #1e293b; box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);">
+                                <div style="color: #64748b;">> IP USSD Console ready...</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SMS Sub-View -->
+                <div id="ip-sms-panel" class="panel" style="display: none; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); padding: 30px;">
+                    <div class="panel-header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 15px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center;">
+                        <h3 style="font-size: 20px; font-weight: 800; color: var(--success); display: flex; align-items: center; gap: 10px; margin: 0;">
+                            <i class="fas fa-envelope"></i> بوابة الرسائل القصيرة SMS عبر IP
+                        </h3>
+                        <button class="btn secondary" style="padding: 8px 16px; border-radius: 8px; font-size: 13px;" onclick="switchIpControlSubView('home')"><i class="fas fa-arrow-right"></i> العودة للبوابة</button>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 30px;">
+                        
+                        <!-- Inbox Reader -->
+                        <div style="display: flex; flex-direction: column; gap: 15px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <label style="font-weight: 700; font-size: 14.5px; margin: 0;">الرسائل الواردة للشريحة (SMS Inbox)</label>
+                                <button id="btnRefreshIpSms" class="btn success" style="padding: 6px 14px; border-radius: 6px; font-size: 12.5px;" onclick="refreshIpSmsList()"><i class="fas fa-sync-alt"></i> تحديث صندوق الوارد</button>
+                            </div>
+                            
+                            <!-- IP config specifically for SMS tab -->
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label style="font-size: 12.5px; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; display: block;">عنوان IP الخاص بمودم الرسائل</label>
+                                <input type="text" id="ip_sms_modem_ip" class="input-field" placeholder="192.168.8.1" value="192.168.8.1" style="height: 38px; border-radius: 6px;">
+                            </div>
+                            
+                            <div id="ipSmsInboxList" style="height: 260px; border: 1px solid var(--border-color); border-radius: 12px; overflow-y: auto; background: var(--bg-color); padding: 15px; display: flex; flex-direction: column; gap: 10px; box-shadow: inset 0 2px 5px rgba(0,0,0,0.02);">
+                                <div style="text-align: center; color: var(--text-muted); margin-top: 90px; font-size: 13.5px;">انقر على "تحديث صندوق الوارد" لقراءة الرسائل الواردة من مودم HiLink.</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Outgoing SMS Form -->
+                        <div style="display: flex; flex-direction: column; gap: 18px; border-right: 1px solid var(--border-color); padding-right: 30px;">
+                            <label style="font-weight: 700; font-size: 14.5px; margin: 0; color: var(--text-main);">إرسال رسالة جديدة للزبون</label>
+                            
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label style="font-size: 13px; font-weight: 600; display: block; margin-bottom: 6px;">رقم هاتف المستلم (Phone Number)</label>
+                                <input type="text" id="ip_sms_recipient" class="input-field" placeholder="مثال: 0550123456" style="height: 44px; border-radius: 8px;">
+                            </div>
+                            
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label style="font-size: 13px; font-weight: 600; display: block; margin-bottom: 6px;">نص الرسالة القصيرة (SMS Message)</label>
+                                <textarea id="ip_sms_text" class="input-field" style="height: 110px; resize: none; border-radius: 8px; padding: 10px; line-height: 1.5;" placeholder="اكتب نص الرسالة هنا..."></textarea>
+                            </div>
+                            
+                            <button id="btnSendIpSms" class="btn success" style="width: 100%; height: 46px; font-weight: 700; font-size: 15px; border-radius: 8px;" onclick="sendIpSms()"><i class="fas fa-paper-plane"></i> إرسال الرسالة الآن</button>
+                        </div>
+                        
+                    </div>
+                </div>
+
+                <!-- Voice Call Sub-View -->
+                <div id="ip-call-panel" class="panel" style="display: none; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); padding: 30px;">
+                    <div class="panel-header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 15px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center;">
+                        <h3 style="font-size: 20px; font-weight: 800; color: #8b5cf6; display: flex; align-items: center; gap: 10px; margin: 0;">
+                            <i class="fas fa-phone-volume"></i> مركز الاتصال الهاتفي المباشر من الشريحة
+                        </h3>
+                        <button class="btn secondary" style="padding: 8px 16px; border-radius: 8px; font-size: 13px;" onclick="switchIpControlSubView('home')"><i class="fas fa-arrow-right"></i> العودة للبوابة</button>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px;">
+                        
+                        <!-- Dialing Controls -->
+                        <div style="display: flex; flex-direction: column; gap: 20px;">
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label style="font-weight: 700; margin-bottom: 8px; display: block; font-size: 14px;">عنوان IP أو منفذ المودم (Modem IP/Port)</label>
+                                <input type="text" id="ip_call_modem_ip" class="input-field" placeholder="مثال: 192.168.8.1 أو COM3" value="192.168.8.1" style="height: 44px; border-radius: 8px;">
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label style="font-weight: 700; margin-bottom: 8px; display: block; font-size: 14px;">رقم الهاتف المراد الاتصال به</label>
+                                <input type="text" id="ip_call_number" class="input-field" placeholder="مثال: 0550123456 أو 1200" style="height: 44px; border-radius: 8px; font-family: monospace; font-size: 15px;">
+                            </div>
+                            
+                            <div style="display: flex; gap: 15px;">
+                                <button id="btnDialCall" class="btn success" style="flex: 1; height: 48px; font-size: 15px; font-weight: 700; border-radius: 8px; background: #10b981; border-color: #10b981;" onclick="dialIpCall()"><i class="fas fa-phone-alt"></i> بدء الاتصال</button>
+                                <button id="btnHangupCall" class="btn danger" style="flex: 1; height: 48px; font-size: 15px; font-weight: 700; border-radius: 8px; background: #ef4444; border-color: #ef4444;" onclick="hangupIpCall()"><i class="fas fa-phone-slash"></i> إنهاء المكالمة</button>
+                            </div>
+                            
+                            <div style="border-top: 1px solid var(--border-color); padding-top: 20px; margin-top: 10px;">
+                                <h4 style="margin-bottom: 12px; font-size: 14px; font-weight: 700; color: var(--text-main);">أرقام اتصال سريعة (مصلحة الزبائن):</h4>
+                                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                    <button class="btn secondary" style="padding: 6px 12px; font-size: 12.5px; border-radius: 6px;" onclick="setQuickCallNumber('666')">موبيليس (666)</button>
+                                    <button class="btn secondary" style="padding: 6px 12px; font-size: 12.5px; border-radius: 6px;" onclick="setQuickCallNumber('777')">جيزي (777)</button>
+                                    <button class="btn secondary" style="padding: 6px 12px; font-size: 12.5px; border-radius: 6px;" onclick="setQuickCallNumber('333')">أوريدو (333)</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Call Console / Active Call Status -->
+                        <div style="display: flex; flex-direction: column;">
+                            <label style="font-weight: 700; margin-bottom: 8px; display: block; font-size: 14px;">حالة الاتصال والعمليات (Call Terminal)</label>
+                            <div id="ipCallLogs" style="flex: 1; min-height: 290px; background: #0f172a; color: #a78bfa; font-family: 'Courier New', monospace; padding: 18px; border-radius: 12px; overflow-y: auto; text-align: left; direction: ltr; font-size: 13.5px; line-height: 1.6; border: 1px solid #1e293b; box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);">
+                                <div style="color: #64748b;">> Call system ready. Enter recipient number and click Start Call.</div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <div id="addSimModal" class="modal">
+        <div class="modal-content">
+            <h3 id="simModalTitle">إضافة شريحة جديدة</h3>
+            <input type="hidden" id="editSimId" value="">
+            <div class="form-group">
+                <label>المتعامل</label>
+                <select id="simOperator" class="input-field" onchange="toggleSimFields()">
+                    <option value="Mobilis">Mobilis</option>
+                    <option value="Sama">Sama (Mobilis Offers)</option>
+                    <option value="Djezzy">Djezzy</option>
+                    <option value="Ooredoo">Ooredoo</option>
+                    <option value="pix">pix</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>رقم الشريحة</label>
+                <input type="text" id="simNumber" class="input-field" placeholder="مثال: 0550000000">
+            </div>
+            <div class="form-group" id="simAddressGroup">
+                <label>العنوان (منفذ COM أو IP المودم)</label>
+                <div style="display:flex; gap:10px;">
+                    <input type="text" id="simAddress" list="comPortsList" class="input-field" placeholder="مثال: 192.168.8.1 أو COM3">
+                    <datalist id="comPortsList"></datalist>
+                    <button class="btn secondary" onclick="scanComPorts()"><i class="fas fa-sync"></i> فحص</button>
+                </div>
+            </div>
+            <button id="simSmartScanBtn" class="btn secondary" style="width:100%; margin-bottom:15px; border-color:var(--success); color:var(--success);" onclick="autoDetectSim(event)"><i class="fas fa-robot"></i> فحص ذكي (التعرف على الشبكة والإشارة)</button>
+            <div class="form-group">
+                <label>كود تحويل مخصص (اختياري)</label>
+                <input type="text" id="simTransferOverride" class="input-field" placeholder="مثال: *610*{phone}*{amount}*0000#">
+            </div>
+            <div class="form-group">
+                <label>كود رصيد مخصص (اختياري)</label>
+                <input type="text" id="simBalanceOverride" class="input-field" placeholder="مثال: *222#">
+            </div>
+            <div class="form-group" id="simTransferMethodGroup">
+                <label>طريقة الشحن (Ooredoo فقط)</label>
+                <select id="simTransferMethod" class="input-field" onchange="toggleSimFields()">
+                    <option value="USSD">موديم USSD عادي</option>
+                    <option value="Ahla App">تطبيق Ahla (محاكي الأندرويد)</option>
+                </select>
+            </div>
+            
+            <div id="ahlaConfigGroup" style="display:none; background: #1e293b; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px dashed var(--primary);">
+                <h4 style="margin-top: 0; color: var(--primary); font-size: 13px; margin-bottom: 10px;"><i class="fas fa-mobile-alt"></i> إعدادات حساب أهلاً (Ahla App)</h4>
+                <div class="form-group">
+                    <label>رقم هاتف أهلاً (Ahla Phone)</label>
+                    <input type="text" id="simAhlaPhone" class="input-field" placeholder="مثال: 0550123456">
+                </div>
+                <div class="form-group" style="margin-bottom: 10px;">
+                    <label>كود PIN الخاص بأهلاً (Ahla PIN)</label>
+                    <input type="text" id="simAhlaPin" class="input-field" placeholder="كود من 4 أرقام (مثال: 7840)">
+                </div>
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label>كود PIN الخاص بالشريحة (SIM PIN - اختياري)</label>
+                    <input type="text" id="simSimPin" class="input-field" placeholder="الرقم السري للشريحة في حال طلبته">
+                </div>
+            </div>
+
+            <div class="form-group" style="background: #1e293b; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px dashed var(--success);">
+                <h4 style="margin-top: 0; color: var(--success); font-size: 13px; margin-bottom: 10px;"><i class="fas fa-percent"></i> إعدادات الفائدة (Marge)</h4>
+                <div style="display:flex; gap:10px;">
+                    <div style="flex:1;">
+                        <label>نسبة الفائدة 1 (%)</label>
+                        <input type="number" step="0.01" id="simMargin1" class="input-field" placeholder="مثال: 1.5">
+                    </div>
+                    <div style="flex:1;">
+                        <label>نسبة الفائدة 2 (%)</label>
+                        <input type="number" step="0.01" id="simMargin2" class="input-field" placeholder="مثال: 1.5">
+                    </div>
+                </div>
+                <small style="color:#64748b; font-size:11px; display:block; margin-top:5px;">هذه النسب ستُستخدم لحساب المربح في تقارير البوت بدقة لهذه الشريحة.</small>
+            </div>
+
+            <button class="btn primary" style="width:100%" onclick="saveSim()">حفظ الشريحة</button>
+            <button class="btn secondary" style="width:100%; margin-top:10px;" onclick="hideModal('addSimModal')">إلغاء</button>
+        </div>
+    </div>
+
+    <div id="addCardModal" class="modal">
+        <div class="modal-content">
+            <h3>إضافة بطاقة تعبئة</h3>
+            <div class="form-group">
+                <label>الفئة</label>
+                <select id="cardCategory" class="input-field">
+                    <option value="Idoom ADSL">Idoom ADSL</option>
+                    <option value="Idoom 4G">Idoom 4G</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>كود التعبئة (PIN)</label>
+                <input type="text" id="cardPin" class="input-field" placeholder="أدخل الرقم السري للبطاقة">
+            </div>
+            <div class="form-group">
+                <label>القيمة (دج)</label>
+                <input type="number" id="cardValue" class="input-field" placeholder="1000">
+            </div>
+            <button class="btn primary" style="width:100%" onclick="saveCard()">حفظ البطاقة</button>
+            <button class="btn secondary" style="width:100%; margin-top:10px;" onclick="hideModal('addCardModal')">إلغاء</button>
+        </div>
+    </div>
+
+    <!-- Agent Balance Modal -->
+    <div id="agentBalanceModal" class="modal">
+        <div class="modal-content">
+            <h3 id="balanceModalTitle">تعديل رصيد الوكيل</h3>
+            <div class="form-group">
+                <label>الوكيل</label>
+                <input type="text" id="balanceAgentName" class="input-field" readonly>
+                <input type="hidden" id="balanceAgentId">
+                <input type="hidden" id="balanceOperationType"> <!-- 'add' or 'remove' -->
+            </div>
+            <div class="form-group">
+                <label>المبلغ (دج)</label>
+                <input type="number" id="balanceAmount" class="input-field" placeholder="1000">
+            </div>
+            <button class="btn primary" style="width:100%" onclick="executeBalanceOperation()">تأكيد</button>
+            <button class="btn secondary" style="width:100%; margin-top:10px;" onclick="hideModal('agentBalanceModal')">إلغاء</button>
+        </div>
+    </div>
+
+    <!-- Add/Edit Agent Modal -->
+    <div id="agentModal" class="modal">
+        <div class="modal-content">
+            <h3 id="agentModalTitle">إضافة زبون جديد</h3>
+            <input type="hidden" id="agentModalAction" value="add">
+            <input type="hidden" id="agentModalId">
+            <div class="form-group">
+                <label>الاسم الكامل</label>
+                <input type="text" id="agentModalName" class="input-field" placeholder="مثال: محمد علي">
+            </div>
+            <div class="form-group">
+                <label>معرف تيليجرام ID</label>
+                <input type="text" id="agentModalTelegramId" class="input-field" placeholder="مثال: 123456789">
+            </div>
+            <div class="form-group">
+                <label>رقم الهاتف</label>
+                <input type="text" id="agentModalPhone" class="input-field" placeholder="مثال: 0770123456">
+            </div>
+            <div class="form-group">
+                <label>الفئة (Tier)</label>
+                <select id="agentModalTier" class="input-field">
+                    <option value="admin">🔴 Admin</option>
+                    <option value="super_grossiste">🟠 Super Grossiste (سوبر تاجر جملة)</option>
+                    <option value="grossiste">🟡 Grossiste (تاجر جملة)</option>
+                    <option value="detaillant" selected>🟢 Détaillant (تاجر)</option>
+                </select>
+            </div>
+            <button class="btn primary" style="width:100%" onclick="saveAgent()">حفظ</button>
+            <button class="btn secondary" style="width:100%; margin-top:10px;" onclick="hideModal('agentModal')">إلغاء</button>
+        </div>
+    </div>
+
+    <!-- Advanced Agent Options Modal -->
+    <div id="agentOptionsModal" class="modal">
+        <div class="modal-content" style="max-width: 500px;">
+            <h3><i class="fas fa-cogs"></i> خيارات الزبون المتقدمة</h3>
+            <input type="hidden" id="agentOptionsId">
+            <div class="form-group" style="background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px;">
+                <label>حالة الحساب</label>
+                <select id="agentOptionsStatus" class="input-field">
+                    <option value="active">نشط (Active)</option>
+                    <option value="suspended">موقوف (Suspended)</option>
+                </select>
+            </div>
+            <div class="form-group" style="background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px;">
+                <label>دور المستخدم</label>
+                <select id="agentOptionsRole" class="input-field">
+                    <option value="user">زبون عادي (User)</option>
+                    <option value="distributor">موزع (Distributor)</option>
+                </select>
+            </div>
+            <div class="form-group" style="background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px;">
+                <label>الفئة (صنف النسب)</label>
+                <select id="agentOptionsTier" class="input-field">
+                    <option value="admin">🔴 Admin</option>
+                    <option value="super_grossiste">🟠 Super Grossiste</option>
+                    <option value="grossiste">🟡 Grossiste</option>
+                    <option value="detaillant">🟢 Détaillant</option>
+                </select>
+            </div>
+            <div class="form-group" style="background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px;">
+                <label>الخدمات الممنوعة عن الزبون</label>
+                <div style="display: flex; gap: 15px; flex-wrap: wrap; margin-top: 10px;">
+                    <label style="display:flex; align-items:center; gap:5px;"><input type="checkbox" class="service-checkbox" value="mobilis"> موبيليس</label>
+                    <label style="display:flex; align-items:center; gap:5px;"><input type="checkbox" class="service-checkbox" value="djezzy"> جازي</label>
+                    <label style="display:flex; align-items:center; gap:5px;"><input type="checkbox" class="service-checkbox" value="ooredoo"> أوريدو</label>
+                    <label style="display:flex; align-items:center; gap:5px;"><input type="checkbox" class="service-checkbox" value="cards"> بطاقات التعبئة</label>
+                </div>
+            </div>
+            <button class="btn primary" style="width:100%" onclick="saveAgentOptions()"><i class="fas fa-save"></i> حفظ الخيارات</button>
+            <button class="btn secondary" style="width:100%; margin-top:10px;" onclick="hideModal('agentOptionsModal')">إلغاء</button>
+        </div>
+    </div>
+
+    <!-- Upload Cards Modal -->
+    <div id="uploadCardsModal" class="modal">
+        <div class="modal-content">
+            <h3>رفع ملف بطاقات</h3>
+            <div class="form-group">
+                <label>الفئة</label>
+                <select id="uploadCategory" class="input-field">
+                    <option value="Mobilis">Mobilis</option>
+                    <option value="Idoom ADSL">Idoom ADSL</option>
+                    <option value="Idoom 4G">Idoom 4G</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>الملف النصي (.txt)</label>
+                <input type="file" id="uploadFile" class="input-field" accept=".txt">
+            </div>
+            <div class="form-group">
+                <label>سعر الشراء (دج)</label>
+                <input type="number" id="uploadPurchasePrice" class="input-field" placeholder="مثال: 950">
+            </div>
+            <div class="form-group">
+                <label>سعر البيع / القيمة (دج)</label>
+                <input type="number" id="uploadSalePrice" class="input-field" placeholder="مثال: 1000">
+            </div>
+            <button class="btn primary" style="width:100%" onclick="handleFileUpload()">رفع وحفظ</button>
+            <button class="btn secondary" style="width:100%; margin-top:10px;" onclick="hideModal('uploadCardsModal')">إلغاء</button>
+        </div>
+    </div>
+
+    <!-- Send Message Modal -->
+    <div id="sendMessageModal" class="modal">
+        <div class="modal-content">
+            <h3 id="msgModalTitle">إرسال رسالة لوكيل</h3>
+            <div class="form-group">
+                <label>الوكيل</label>
+                <input type="text" id="msgAgentName" class="input-field" readonly>
+                <input type="hidden" id="msgAgentId">
+            </div>
+            <div class="form-group">
+                <label>الرسالة</label>
+                <textarea id="direct_message_text" class="input-field" style="height: 120px; resize: none;" placeholder="اكتب رسالتك هنا..."></textarea>
+            </div>
+            <button class="btn primary" style="width:100%" onclick="sendDirectMessage()">إرسال الرسالة</button>
+            <button class="btn secondary" style="width:100%; margin-top:10px;" onclick="hideModal('sendMessageModal')">إلغاء</button>
+        </div>
+    </div>
+
+    <!-- SIM Offer Add/Edit Modal -->
+    <div id="addSimOfferModal" class="modal">
+        <div class="modal-content">
+            <h3 id="offerModalTitle">إضافة عرض شريحة جديد</h3>
+            <input type="hidden" id="editOfferId" value="">
+            <div class="form-group">
+                <label>المتعامل (Operator)</label>
+                <select id="offerOperator" class="input-field">
+                    <option value="Mobilis">Mobilis</option>
+                    <option value="Djezzy">Djezzy</option>
+                    <option value="Ooredoo">Ooredoo</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>اسم العرض (Offer Name)</label>
+                <input type="text" id="offerName" class="input-field" placeholder="مثال: Pix 2000 أو Hayla 1000">
+            </div>
+            <div class="form-group">
+                <label>رمز التفعيل USSD (USSD Code)</label>
+                <input type="text" id="offerUssdCode" class="input-field" placeholder="مثال: *600*2# أو *720*1#">
+            </div>
+            <div class="form-group">
+                <label>القيمة / السعر بالدينار (DZD Price)</label>
+                <input type="number" id="offerPrice" class="input-field" placeholder="مثال: 2000">
+            </div>
+            <div class="form-group">
+                <label>تفاصيل العرض / الوصف (Offer Details / Description)</label>
+                <textarea id="offerDescription" class="input-field" style="height: 60px; resize: none;" placeholder="مثال: مكالمات غير محدودة + 30 جيجا انترنت"></textarea>
+            </div>
+            <button class="btn primary" style="width:100%" onclick="saveSimOffer()">حفظ العرض</button>
+            <button class="btn secondary" style="width:100%; margin-top:10px;" onclick="hideModal('addSimOfferModal')">إلغاء</button>
+        </div>
+    </div>
+
+    <!-- Product Add/Edit Modal -->
+    <div id="addProductModal" class="modal">
+        <div class="modal-content">
+            <h3 id="productModalTitle">إضافة منتج جديد</h3>
+            <input type="hidden" id="editProductId" value="">
+            <div class="form-group">
+                <label>المتعامل</label>
+                <select id="productOperator" class="input-field">
+                    <option value="Mobilis">Mobilis</option>
+                    <option value="Djezzy">Djezzy</option>
+                    <option value="Ooredoo">Ooredoo</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>اسم المنتج</label>
+                <input type="text" id="productName" class="input-field" placeholder="مثال: Flexy Djezzy">
+            </div>
+            <div class="form-group">
+                <label>السعر الأساسي (دج)</label>
+                <input type="number" step="0.01" id="productBasePrice" class="input-field" placeholder="مثال: 10000">
+            </div>
+            
+            <div style="background: #1e293b; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px dashed var(--success);">
+                <h4 style="margin-top: 0; color: var(--success); font-size: 13px; margin-bottom: 10px;"><i class="fas fa-percent"></i> نسب الفوائد حسب الفئة</h4>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <div>
+                        <label style="font-size:12px;">Admin (%)</label>
+                        <input type="number" step="0.01" id="productMarginAdmin" class="input-field" placeholder="1.5">
+                    </div>
+                    <div>
+                        <label style="font-size:12px;">Super Grossiste (%)</label>
+                        <input type="number" step="0.01" id="productMarginSuperGrossiste" class="input-field" placeholder="2.0">
+                    </div>
+                    <div>
+                        <label style="font-size:12px;">Grossiste (%)</label>
+                        <input type="number" step="0.01" id="productMarginGrossiste" class="input-field" placeholder="3.0">
+                    </div>
+                    <div>
+                        <label style="font-size:12px;">Détaillant (%)</label>
+                        <input type="number" step="0.01" id="productMarginDetaillant" class="input-field" placeholder="5.0">
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn primary" style="width:100%" onclick="saveProduct()">حفظ المنتج</button>
+            <button class="btn secondary" style="width:100%; margin-top:10px;" onclick="hideModal('addProductModal')">إلغاء</button>
+        </div>
+    </div>
+
+    <script src="ui_script.js"></script>
+</body>
+</html>
