@@ -2346,6 +2346,8 @@ function openAgentModal(mode, agent = null) {
         document.getElementById('agentModalName').value = '';
         document.getElementById('agentModalTelegramId').value = '';
         document.getElementById('agentModalPhone').value = '';
+        if (document.getElementById('agentModalUsername')) document.getElementById('agentModalUsername').value = '';
+        if (document.getElementById('agentModalPassword')) document.getElementById('agentModalPassword').value = '';
         if (document.getElementById('agentModalTier')) document.getElementById('agentModalTier').value = 'detaillant';
     } else {
         document.getElementById('agentModalTitle').innerText = 'تعديل بيانات الزبون';
@@ -2353,6 +2355,8 @@ function openAgentModal(mode, agent = null) {
         document.getElementById('agentModalName').value = agent.name;
         document.getElementById('agentModalTelegramId').value = agent.telegram_id;
         document.getElementById('agentModalPhone').value = agent.phone_number;
+        if (document.getElementById('agentModalUsername')) document.getElementById('agentModalUsername').value = agent.username || '';
+        if (document.getElementById('agentModalPassword')) document.getElementById('agentModalPassword').value = '';
         if (document.getElementById('agentModalTier')) document.getElementById('agentModalTier').value = agent.tier || 'detaillant';
     }
     showModal('agentModal');
@@ -2364,6 +2368,8 @@ async function saveAgent() {
     const name = document.getElementById('agentModalName').value.trim();
     const telegram_id = document.getElementById('agentModalTelegramId').value.trim();
     const phone_number = document.getElementById('agentModalPhone').value.trim();
+    const username = document.getElementById('agentModalUsername') ? document.getElementById('agentModalUsername').value.trim() : '';
+    const password = document.getElementById('agentModalPassword') ? document.getElementById('agentModalPassword').value.trim() : '';
     const tier = document.getElementById('agentModalTier') ? document.getElementById('agentModalTier').value : 'detaillant';
     
     if (!name) {
@@ -2374,9 +2380,9 @@ async function saveAgent() {
     try {
         let result;
         if (action === 'add') {
-            result = await apiCall('add-agent', { name, telegram_id, phone_number, tier });
+            result = await apiCall('add-agent', { name, telegram_id, phone_number, username, password, tier });
         } else {
-            result = await apiCall('update-agent', { id, name, telegram_id, phone_number, tier });
+            result = await apiCall('update-agent', { id, name, telegram_id, phone_number, username, password, tier });
         }
         
         if (result.success) {
